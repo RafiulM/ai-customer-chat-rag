@@ -15,8 +15,6 @@ interface WelcomeScreenProps {
     apiKeyError: string | null;
     files: File[];
     setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-    isApiKeySelected: boolean;
-    onSelectKey: () => Promise<void>;
 }
 
 const sampleDocuments = [
@@ -36,7 +34,7 @@ const sampleDocuments = [
     }
 ];
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onUpload, apiKeyError, files, setFiles, isApiKeySelected, onSelectKey }) => {
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onUpload, apiKeyError, files, setFiles }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [loadingSample, setLoadingSample] = useState<string | null>(null);
 
@@ -102,11 +100,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onUpload, apiKeyError, fi
         setFiles(prevFiles => prevFiles.filter((_, index) => index !== indexToRemove));
     };
 
-    const handleSelectKeyClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        await onSelectKey();
-    };
-
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
             <div className="w-full max-w-3xl text-center">
@@ -115,21 +108,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onUpload, apiKeyError, fi
                     Powered by <strong className="font-semibold text-gem-offwhite">FileSearch</strong>. Upload a manual or select example to see RAG in action.
                 </p>
 
-                <div className="w-full max-w-xl mx-auto mb-8">
-                     {!isApiKeySelected ? (
-                        <button
-                            onClick={handleSelectKeyClick}
-                            className="w-full bg-gem-blue hover:bg-blue-500 text-white font-semibold rounded-lg py-3 px-5 text-center focus:outline-none focus:ring-2 focus:ring-gem-blue"
-                        >
-                            Select Gemini API Key to Begin
-                        </button>
-                    ) : (
-                        <div className="w-full bg-gem-slate border border-gem-mist/50 rounded-lg py-3 px-5 text-center text-gem-teal font-semibold">
-                            ✓ API Key Selected
+                {apiKeyError && (
+                    <div className="w-full max-w-xl mx-auto mb-8">
+                        <div className="w-full bg-red-900/20 border border-red-500/50 rounded-lg py-3 px-5 text-center text-red-300">
+                            <p className="font-semibold mb-1">⚠ API Key Error</p>
+                            <p className="text-sm">{apiKeyError}</p>
                         </div>
-                    )}
-                     {apiKeyError && <p className="text-red-500 text-sm mt-2">{apiKeyError}</p>}
-                </div>
+                    </div>
+                )}
 
                 <div 
                     className={`relative border-2 border-dashed rounded-lg p-10 text-center transition-colors mb-6 ${isDragging ? 'border-gem-blue bg-gem-mist/10' : 'border-gem-mist/50'}`}
@@ -184,9 +170,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onUpload, apiKeyError, fi
                     {files.length > 0 && (
                         <button 
                             onClick={handleConfirmUpload}
-                            disabled={!isApiKeySelected}
+                            disabled={!!apiKeyError}
                             className="w-full px-6 py-3 rounded-md bg-gem-blue hover:bg-blue-500 text-white font-bold transition-colors disabled:bg-gem-mist/50 disabled:cursor-not-allowed"
-                            title={!isApiKeySelected ? "Please select an API key first" : "Start chat session with the selected files"}
+                            title={apiKeyError ? "Please fix the API key error first" : "Start chat session with the selected files"}
                         >
                             Upload and Chat
                         </button>

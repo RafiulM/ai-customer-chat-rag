@@ -8,7 +8,11 @@ import { RagStore, Document, QueryResult, CustomMetadata } from '../types';
 let ai: GoogleGenAI;
 
 export function initialize() {
-    ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
+    if (!apiKey) {
+        throw new Error("GEMINI_API_KEY is not set in .env.local");
+    }
+    ai = new GoogleGenAI({ apiKey });
 }
 
 async function delay(ms: number): Promise<void> {
