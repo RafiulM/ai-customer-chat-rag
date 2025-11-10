@@ -10,9 +10,10 @@
     "lint": "echo \"No linting configured\""
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.53.8",
+    "@google/genai": "^1.29.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@google/genai": "^1.29.0"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
