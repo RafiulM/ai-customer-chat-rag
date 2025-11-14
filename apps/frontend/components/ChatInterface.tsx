@@ -125,7 +125,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ documentName, history, is
 
     return (
         <div className="flex flex-col h-full relative">
-            <header className="absolute top-0 left-0 right-0 p-4 bg-gem-onyx/80 backdrop-blur-sm z-10 flex justify-between items-center border-b border-gem-mist">
+            <header className="flex-shrink-0 p-4 bg-gem-onyx/80 backdrop-blur-sm z-10 flex justify-between items-center border-b border-gem-mist">
                 <div className="w-full max-w-4xl mx-auto flex justify-between items-center px-4">
                     <h1 className="text-2xl font-bold text-gem-offwhite truncate" title={`Chat with ${documentName}`}>Chat with {documentName}</h1>
                     <button
@@ -139,7 +139,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ documentName, history, is
                 </div>
             </header>
 
-            <div className="flex-grow pt-24 pb-32 overflow-y-auto px-4">
+            <div className="flex-1 overflow-y-auto px-4 py-4">
                 <div className="w-full max-w-4xl mx-auto space-y-6">
                     {history.map((message, index) => (
                         <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -183,7 +183,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ documentName, history, is
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gem-onyx/80 backdrop-blur-sm">
+            <div className="flex-shrink-0 p-4 bg-gem-onyx/80 backdrop-blur-sm border-t border-gem-mist">
                  <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-2 min-h-[3rem] flex items-center justify-center">
                         {!isQueryLoading && currentSuggestion && (

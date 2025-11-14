@@ -12,7 +12,9 @@ export default defineConfig(({ mode }) => {
       plugins: [react()],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        'process.env.VITE_ALLOWED_EMAIL': JSON.stringify(env.VITE_ALLOWED_EMAIL),
+        'process.env.VITE_DEFAULT_RAG_STORE_NAME': JSON.stringify(env.VITE_DEFAULT_RAG_STORE_NAME)
       },
       resolve: {
         alias: {

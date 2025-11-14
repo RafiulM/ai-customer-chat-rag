@@ -1,0 +1,47 @@
+[
+  {
+    "id": "TC001",
+    "title": "post api chats save chat message",
+    "description": "Verify that the POST /api/chats endpoint correctly saves a chat message with user authentication, validates input data, and returns appropriate success or error responses."
+  },
+  {
+    "id": "TC002",
+    "title": "get api chats retrieve chat history",
+    "description": "Verify that the GET /api/chats endpoint retrieves the authenticated user's chat history with pagination and filtering, ensuring user-scoped data isolation and correct response format."
+  },
+  {
+    "id": "TC003",
+    "title": "delete api chats delete chat message",
+    "description": "Verify that the DELETE /api/chats/:id endpoint deletes a specific chat message belonging to the authenticated user and returns appropriate success or error responses."
+  },
+  {
+    "id": "TC004",
+    "title": "post api ragstores create rag store",
+    "description": "Verify that the POST /api/ragstores endpoint creates a new RAG store with unique name validation, stores metadata accurately, and enforces user authentication."
+  },
+  {
+    "id": "TC005",
+    "title": "get api ragstores retrieve user rag stores",
+    "description": "Verify that the GET /api/ragstores endpoint retrieves all RAG stores belonging to the authenticated user with correct data and user-scoped isolation."
+  },
+  {
+    "id": "TC006",
+    "title": "get api ragstores retrieve specific rag store",
+    "description": "Verify that the GET /api/ragstores/:name endpoint retrieves a specific RAG store by name along with its chat count for the authenticated user."
+  },
+  {
+    "id": "TC007",
+    "title": "put api ragstores update rag store",
+    "description": "Verify that the PUT /api/ragstores/:name endpoint updates the specified RAG store's details for the authenticated user and returns appropriate success or error responses."
+  },
+  {
+    "id": "TC008",
+    "title": "delete api ragstores delete rag store and chats",
+    "description": "Verify that the DELETE /api/ragstores/:name endpoint deletes the specified RAG store and all associated chats for the authenticated user."
+  },
+  {
+    "id": "TC009",
+    "title": "get health check endpoint",
+    "description": "Verify that the GET /health endpoint returns the correct server health status indicating the backend service is operational."
+  }
+]
