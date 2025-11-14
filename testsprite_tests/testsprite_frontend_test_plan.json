@@ -1,0 +1,493 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Authentication Success with Clerk",
+    "description": "Verify that a user can sign in successfully through Clerk and access protected routes.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the sign-in page."
+      },
+      {
+        "type": "action",
+        "description": "Enter valid Clerk user credentials and submit."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that sign-in is successful and the user is redirected to the welcome screen."
+      },
+      {
+        "type": "action",
+        "description": "Access a protected API endpoint with authenticated session."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is granted without errors."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Fallback Admin User Authentication for Unauthenticated Requests",
+    "description": "Verify the backend allows requests from unauthenticated users via admin fallback user ID and applies correct permissions.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make an API request without authentication headers."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the fallback admin user ID is applied and response returns data appropriately."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to access privileged routes and verify access limitations as per fallback user permissions."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure unauthorized operations are blocked and appropriate error responses are returned."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Document Upload - Supported File Types",
+    "description": "Validate the document upload accepts supported file formats (PDF, TXT, MD) via drag-and-drop and file browser.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Use drag-and-drop to upload a PDF document."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify upload progress bar displays and upload completes successfully."
+      },
+      {
+        "type": "action",
+        "description": "Use file browser to upload TXT and MD documents."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm all uploads are processed, and file names appear in the document list."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Document Upload - Unsupported File Types",
+    "description": "Ensure upload component rejects unsupported file formats and provides clear user feedback.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to upload unsupported file types (e.g., EXE, JPG) via drag-and-drop and file browser."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the UI displays an error message specifying unsupported file type."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that no upload progress occurs and files are not processed or listed."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "RAG Store Creation with Unique Names",
+    "description": "Test creation of a new RAG store with unique name and validate metadata stored in the database.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create a new RAG store with a unique name and valid display name."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify API returns success and the store is visible in the user's RAG store list."
+      },
+      {
+        "type": "assertion",
+        "description": "Check database entry exists with correct user_id, name, display_name, and document count zero."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "RAG Store Creation - Duplicate Name Rejection",
+    "description": "Validate that creating a RAG store with an existing user-scoped name is rejected with a validation error.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to create a RAG store with a name already existing under the same user."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the API returns an error indicating name must be unique."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no new store is created in the database."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Embedding Generation via Google Gemini API",
+    "description": "Test automatic generation of semantic embeddings for uploaded documents using Gemini API integration.",
+    "category": "integration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Upload supported documents and create a RAG store."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify calls to Gemini API are made with correct payload."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm embeddings are generated successfully and stored appropriately linked to the RAG store."
+      },
+      {
+        "type": "assertion",
+        "description": "Check UI shows progress during embedding generation."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Chat Interface - Real-Time Response Rendering with Markdown",
+    "description": "Verify the chat interface processes user queries, renders AI responses with markdown, and includes source citations.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Enter the chat interface of an existing RAG store."
+      },
+      {
+        "type": "action",
+        "description": "Type a valid query and submit."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the AI response is displayed in real-time using markdown rendering (including lists, links, emphasis)."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm clickable source citations appear linked to document chunks."
+      },
+      {
+        "type": "action",
+        "description": "Click a source citation."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a modal appears showing the exact retrieved document text chunk."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Chat History Persistence with Pagination and User Scoped Isolation",
+    "description": "Validate chat messages and AI responses persist in the database, support pagination, and are only accessible by their owner.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Participate in multiple chats in a RAG store generating multiple message-response pairs."
+      },
+      {
+        "type": "action",
+        "description": "Reload the chat interface."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that chat history loads correctly with pagination controls."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to query chat history from another user's session or API token."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure access is denied and no chat messages are returned."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "API Endpoint Validation and Error Handling",
+    "description": "Test that all RESTful API endpoints validate inputs, handle errors gracefully, and return appropriate HTTP status codes with messages.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send malformed or invalid requests to all key API endpoints (e.g., missing required fields, invalid data types)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify API returns 4xx status codes with descriptive error messages."
+      },
+      {
+        "type": "action",
+        "description": "Simulate backend failures or third-party API failures (e.g., Gemini API unreachable)."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the API returns 5xx error codes and frontend displays user-friendly retry options."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Frontend Upload Progress and UI Feedback",
+    "description": "Verify that the UI shows accurate progress indicators during document uploads and embedding generation, and error states with retry options.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Start uploading multiple documents."
+      },
+      {
+        "type": "assertion",
+        "description": "Observe the progress bars reflect actual upload and embedding generation progress."
+      },
+      {
+        "type": "action",
+        "description": "Simulate a failure during upload or embedding generation."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI displays an error message with an option to retry."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Session Management - Resume Previous Sessions and Unauthorized User Handling",
+    "description": "Validate that authenticated users can resume prior chat sessions and unauthorized users are assigned a default RAG store with chat history loading.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Sign in and create chat messages in a RAG store."
+      },
+      {
+        "type": "action",
+        "description": "Sign out and sign back in."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify previous chat sessions and RAG stores load correctly."
+      },
+      {
+        "type": "action",
+        "description": "Access the application without signing in."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm user is assigned the default RAG store and can view its chat history."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Health Check Endpoint Verification",
+    "description": "Ensure that the backend health check endpoint returns correct status indicating server health.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send a GET request to /health endpoint."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the response status is 200 and body indicates the server is healthy."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "API CORS Policy Enforcement",
+    "description": "Test that backend API enforces CORS policies restricting cross-origin requests to allowed frontends.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "From an allowed frontend origin, send API requests."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm requests succeed and proper CORS headers are included in responses."
+      },
+      {
+        "type": "action",
+        "description": "From a disallowed origin, attempt to send API requests."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify requests are blocked or CORS headers prevent access."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "RAG Store Management - Update and Delete",
+    "description": "Verify that users can update metadata of a RAG store and delete it along with associated chat history properly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Update the display name and metadata of a RAG store via API."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the update is successful and changes are reflected in the database and UI."
+      },
+      {
+        "type": "action",
+        "description": "Delete the same RAG store."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the store is removed along with all associated chats both in the database and UI."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Chat CRUD Operations with User Scoping",
+    "description": "Validate saving, retrieving (with pagination), and deleting chat messages scoped to the authenticated user.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Save a new chat message and AI response to a RAG store."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure chat is persisted with correct user_id, message, response, and rag_store_name."
+      },
+      {
+        "type": "action",
+        "description": "Retrieve chat history for the user specifying pagination parameters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pagination works correctly and only the user's messages are returned."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to delete a chat message belonging to the user."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the deletion is successful and message is removed."
+      },
+      {
+        "type": "action",
+        "description": "Try to access or delete chat messages belonging to other users."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that access is denied with appropriate error codes."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Frontend Responsive Design and Accessibility",
+    "description": "Verify the user interface works correctly across various screen sizes (mobile, tablet, desktop) and is accessible.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application on different devices and viewport sizes."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm all UI components, including drag-and-drop upload, chat interface, and modals, render and function properly."
+      },
+      {
+        "type": "action",
+        "description": "Use keyboard navigation through main interactive elements."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure all functionality is accessible without a mouse with proper focus handling."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "AI Generated Example Questions Rotation",
+    "description": "Test that the system generates AI example questions for each RAG store and rotates them in the UI periodically.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create a new RAG store and upload documents."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify AI-generated example questions are stored in the RAG store metadata."
+      },
+      {
+        "type": "action",
+        "description": "Observe the example question area in the chat UI over time."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that example questions rotate at defined intervals."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Source Modal Interaction and Display",
+    "description": "Verify that source modals open on clicking citations and display correct document text chunks with seamless closing.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "In chat, click on a source citation link."
+      },
+      {
+        "type": "assertion",
+        "description": "Modal opens displaying corresponding retrieved document text chunk."
+      },
+      {
+        "type": "action",
+        "description": "Close the modal using close button and escape key."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm modal closes and focus returns appropriately."
+      }
+    ]
+  }
+]

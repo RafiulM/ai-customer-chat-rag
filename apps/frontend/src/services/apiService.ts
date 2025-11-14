@@ -1,9 +1,9 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth } from "@clerk/clerk-react";
 
 // API service for making authenticated requests to the backend
 export class ApiService {
@@ -16,16 +16,26 @@ export class ApiService {
   }
 
   private async getAuthHeaders(): Promise<HeadersInit> {
-    const token = await this.getToken();
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+    try {
+      // Get the session token from Clerk (optional - don't fail if not available)
+      const token = await this.getToken();
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
 
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      // If no token, proceed without Authorization header (backend will use admin_user_id)
+
+      return headers;
+    } catch (error) {
+      // If getToken fails (e.g., user not signed in), proceed without auth
+      // Backend will use admin_user_id from environment
+      return {
+        "Content-Type": "application/json",
+      };
     }
-
-    return headers;
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
@@ -35,7 +45,8 @@ export class ApiService {
 
       try {
         const errorData = JSON.parse(errorText);
-        errorMessage = errorData.error || errorData.message || `HTTP ${response.status}`;
+        errorMessage =
+          errorData.error || errorData.message || `HTTP ${response.status}`;
       } catch {
         errorMessage = `HTTP ${response.status}: ${errorText}`;
       }
@@ -54,7 +65,7 @@ export class ApiService {
     metadata?: any;
   }) {
     const response = await fetch(`${this.baseUrl}/api/chats`, {
-      method: 'POST',
+      method: "POST",
       headers: await this.getAuthHeaders(),
       body: JSON.stringify(data),
     });
@@ -62,25 +73,27 @@ export class ApiService {
     return this.handleResponse(response);
   }
 
-  async getChats(options: {
-    ragStoreName?: string;
-    limit?: number;
-    offset?: number;
-  } = {}) {
+  async getChats(
+    options: {
+      ragStoreName?: string;
+      limit?: number;
+      offset?: number;
+    } = {}
+  ) {
     const params = new URLSearchParams();
 
     if (options.ragStoreName) {
-      params.append('ragStoreName', options.ragStoreName);
+      params.append("ragStoreName", options.ragStoreName);
     }
     if (options.limit) {
-      params.append('limit', options.limit.toString());
+      params.append("limit", options.limit.toString());
     }
     if (options.offset) {
-      params.append('offset', options.offset.toString());
+      params.append("offset", options.offset.toString());
     }
 
     const response = await fetch(`${this.baseUrl}/api/chats?${params}`, {
-      method: 'GET',
+      method: "GET",
       headers: await this.getAuthHeaders(),
     });
 
@@ -89,7 +102,7 @@ export class ApiService {
 
   async deleteChat(chatId: number) {
     const response = await fetch(`${this.baseUrl}/api/chats/${chatId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: await this.getAuthHeaders(),
     });
 
@@ -103,7 +116,7 @@ export class ApiService {
     metadata?: any;
   }) {
     const response = await fetch(`${this.baseUrl}/api/ragstores`, {
-      method: 'POST',
+      method: "POST",
       headers: await this.getAuthHeaders(),
       body: JSON.stringify(data),
     });
@@ -113,7 +126,7 @@ export class ApiService {
 
   async getRagStores() {
     const response = await fetch(`${this.baseUrl}/api/ragstores`, {
-      method: 'GET',
+      method: "GET",
       headers: await this.getAuthHeaders(),
     });
 
@@ -121,33 +134,45 @@ export class ApiService {
   }
 
   async getRagStore(name: string) {
-    const response = await fetch(`${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`, {
-      method: 'GET',
-      headers: await this.getAuthHeaders(),
-    });
+    const response = await fetch(
+      `${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`,
+      {
+        method: "GET",
+        headers: await this.getAuthHeaders(),
+      }
+    );
 
     return this.handleResponse(response);
   }
 
-  async updateRagStore(name: string, data: {
-    displayName?: string;
-    metadata?: any;
-    documentCount?: number;
-  }) {
-    const response = await fetch(`${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`, {
-      method: 'PUT',
-      headers: await this.getAuthHeaders(),
-      body: JSON.stringify(data),
-    });
+  async updateRagStore(
+    name: string,
+    data: {
+      displayName?: string;
+      metadata?: any;
+      documentCount?: number;
+    }
+  ) {
+    const response = await fetch(
+      `${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`,
+      {
+        method: "PUT",
+        headers: await this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
 
     return this.handleResponse(response);
   }
 
   async deleteRagStore(name: string) {
-    const response = await fetch(`${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`, {
-      method: 'DELETE',
-      headers: await this.getAuthHeaders(),
-    });
+    const response = await fetch(
+      `${this.baseUrl}/api/ragstores/${encodeURIComponent(name)}`,
+      {
+        method: "DELETE",
+        headers: await this.getAuthHeaders(),
+      }
+    );
 
     return this.handleResponse(response);
   }
@@ -156,9 +181,22 @@ export class ApiService {
 // Hook to use API service with Clerk authentication
 export const useApiService = () => {
   const { getToken } = useAuth();
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
-  const apiService = new ApiService(baseUrl, getToken);
+  // Wrap getToken to ensure we get a valid session token (optional)
+  const getTokenWrapper = async () => {
+    try {
+      // Get the session token - Clerk's getToken() returns a JWT session token by default
+      // If user is not signed in, this will return null, which is fine
+      const token = await getToken();
+      return token;
+    } catch (error) {
+      // User is not signed in, return null - backend will use admin_user_id
+      return null;
+    }
+  };
+
+  const apiService = new ApiService(baseUrl, getTokenWrapper);
   return apiService;
 };
 

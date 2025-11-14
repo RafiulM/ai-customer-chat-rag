@@ -1,0 +1,91 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "React 19",
+    "Express.js 4",
+    "PostgreSQL",
+    "Drizzle ORM",
+    "Vite",
+    "Clerk Authentication",
+    "Google Gemini API",
+    "Tailwind CSS"
+  ],
+  "features": [
+    {
+      "name": "Authentication",
+      "description": "User authentication using Clerk SDK with admin fallback support for unauthenticated users",
+      "files": [
+        "apps/frontend/App.tsx",
+        "apps/frontend/components/AuthenticatedApp.tsx",
+        "apps/backend/src/middleware/auth.ts"
+      ]
+    },
+    {
+      "name": "Document Upload",
+      "description": "File upload interface with drag-and-drop support for PDF, TXT, and MD files",
+      "files": [
+        "apps/frontend/components/WelcomeScreen.tsx",
+        "apps/frontend/components/UploadModal.tsx",
+        "apps/frontend/components/ProgressBar.tsx"
+      ]
+    },
+    {
+      "name": "RAG Store Management",
+      "description": "Create, read, update, and delete RAG stores with metadata management",
+      "files": [
+        "apps/frontend/components/RagStoreList.tsx",
+        "apps/frontend/services/geminiService.ts",
+        "apps/backend/src/routes/ragstores.ts",
+        "apps/backend/src/db/schema.ts"
+      ]
+    },
+    {
+      "name": "Chat Interface",
+      "description": "Real-time chat interface with markdown rendering, source citations, and chat history",
+      "files": [
+        "apps/frontend/components/ChatInterface.tsx",
+        "apps/frontend/components/QueryInterface.tsx",
+        "apps/frontend/components/DocumentList.tsx"
+      ]
+    },
+    {
+      "name": "Chat API",
+      "description": "Backend API endpoints for saving, retrieving, and deleting chat messages with pagination",
+      "files": [
+        "apps/backend/src/routes/chats.ts",
+        "apps/backend/src/db/schema.ts"
+      ]
+    },
+    {
+      "name": "Gemini API Integration",
+      "description": "Integration with Google Gemini API for RAG operations including file search, embedding generation, and example question generation",
+      "files": ["apps/frontend/services/geminiService.ts"]
+    },
+    {
+      "name": "API Service",
+      "description": "Frontend API client for making authenticated requests to backend endpoints",
+      "files": ["apps/frontend/src/services/apiService.ts"]
+    },
+    {
+      "name": "Database Schema",
+      "description": "PostgreSQL database schema with Drizzle ORM for chats and RAG stores",
+      "files": [
+        "apps/backend/src/db/schema.ts",
+        "apps/backend/src/db/connection.ts"
+      ]
+    },
+    {
+      "name": "Health Check",
+      "description": "Backend health check endpoint for monitoring server status",
+      "files": ["apps/backend/src/index.ts"]
+    },
+    {
+      "name": "Error Handling",
+      "description": "Comprehensive error handling with user-friendly error messages and retry options",
+      "files": [
+        "apps/backend/src/index.ts",
+        "apps/frontend/components/WelcomeScreen.tsx"
+      ]
+    }
+  ]
+}

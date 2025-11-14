@@ -1,0 +1,207 @@
+{
+  "meta": {
+    "project": "AI Customer Chat RAG",
+    "date": "2025-11-12",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "AI Customer Chat RAG is a full-stack, AI-powered customer chat application that leverages Retrieval-Augmented Generation (RAG) to let users upload documents, automatically generate semantic embeddings, and engage in interactive chats where AI retrieves relevant information grounded in the uploaded documents.",
+  "core_goals": [
+    "Provide seamless user authentication and session management with Clerk integration.",
+    "Enable users to upload multiple document types and automatically generate embeddings for semantic search.",
+    "Allow creation, management, and deletion of RAG stores containing documents and chat history.",
+    "Deliver real-time chat experience with markdown-rendered AI responses linked to source documents.",
+    "Support persistent chat history with pagination and user-scoped data isolation.",
+    "Offer a responsive and user-friendly interface with progress indicators and example question suggestions.",
+    "Ensure robust, secure, and validated backend API services with comprehensive error handling and health monitoring."
+  ],
+  "key_features": [
+    "User Authentication and Authorization with Clerk and admin fallback support.",
+    "Document Upload and RAG Store Management: Upload various file types, create RAG stores, and manage them via frontend and backend.",
+    "Automatic Embedding Generation using Google Gemini API for semantic search capabilities.",
+    "Real-Time Chat Interface featuring markdown rendering, source citations, and example question rotation.",
+    "Chat History Persistence with pagination and user-scoped data security.",
+    "API Services: RESTful endpoints for chat and RAG store CRUD operations with input validation.",
+    "Session Management including previous session resume, default RAG store for unauthorized users, and chat history loading.",
+    "Frontend Features like drag-and-drop upload, progress bars, source modals, responsive design, and error states with retry options.",
+    "Backend Infrastructure using Express.js, TypeScript, PostgreSQL with Drizzle ORM, and Docker Compose for containerization."
+  ],
+  "user_flow_summary": [
+    "User optionally signs in using Clerk or is assigned fallback admin user for backend access.",
+    "User lands on Welcome Screen with options to upload documents or resume previous RAG store sessions.",
+    "User uploads multiple documents (PDF, TXT, MD) using drag-and-drop or file browser; upload progress is shown.",
+    "The system creates a RAG store, generates embeddings with Gemini API, and generates example AI questions for the store.",
+    "User enters the chat interface, types queries, and receives AI-generated responses rendered with markdown and grounded in source documents.",
+    "User clicks on source citations in chat to open modals with retrieved document text chunks.",
+    "Chat messages and corresponding AI responses are saved to backend with pagination support.",
+    "User can manage RAG stores and documents, create new chats, or resume previous sessions at any time.",
+    "Error states are handled gracefully with informative messages and retry options.",
+    "The system maintains health endpoints and robust error handling throughout."
+  ],
+  "validation_criteria": [
+    "User authentication and session handling works correctly with Clerk and fallback admin user in all scenarios.",
+    "All API endpoints enforce validation rules and return appropriate success or error responses.",
+    "Document uploads accept supported file formats and reject invalid files with user feedback.",
+    "RAG store creation validates unique names and stores metadata accurately in the database.",
+    "Embedding generation via Gemini API responds timely and integrates seamlessly with store management.",
+    "Chat interface renders markdown correctly, displays source citations, and shows rotating example questions.",
+    "All chat and RAG store CRUD operations are user-scoped and persist reliably in PostgreSQL.",
+    "Frontend UI shows progress indicators during uploads and provides responsive and accessible design.",
+    "Error scenarios trigger proper UI feedback and backend error codes according to specification.",
+    "Health check endpoint returns correct status indicating server health.",
+    "Cross-origin requests are restricted by configured CORS policies matching frontend URLs."
+  ],
+  "code_summary": {
+    "project_name": "AI Customer Chat RAG",
+    "description": "A full-stack AI-powered customer chat application with RAG (Retrieval-Augmented Generation) capabilities. Users can upload documents, generate embeddings, and chat with AI that retrieves relevant information from uploaded documents.",
+    "tech_stack": {
+      "frontend": {
+        "framework": "React 19",
+        "build_tool": "Vite",
+        "language": "TypeScript",
+        "authentication": "Clerk (@clerk/clerk-react)",
+        "ai_service": "Google Gemini API (@google/genai)",
+        "styling": "Tailwind CSS (via index.css)",
+        "markdown": "react-markdown, remark-gfm"
+      },
+      "backend": {
+        "framework": "Express.js 4",
+        "language": "TypeScript",
+        "database": "PostgreSQL",
+        "orm": "Drizzle ORM",
+        "authentication": "Clerk (@clerk/clerk-sdk-node)",
+        "validation": "express-validator",
+        "cors": "cors middleware"
+      },
+      "infrastructure": {
+        "monorepo": "Turbo",
+        "package_manager": "pnpm",
+        "database_migration": "Drizzle Kit",
+        "containerization": "Docker Compose (PostgreSQL)"
+      }
+    },
+    "features": {
+      "authentication": {
+        "provider": "Clerk",
+        "features": [
+          "User sign-in/sign-up",
+          "Protected API routes",
+          "User session management",
+          "Admin fallback user support"
+        ]
+      },
+      "rag_functionality": {
+        "document_upload": "Users can upload multiple documents",
+        "embedding_generation": "Automatic embedding generation via Gemini API",
+        "rag_store_management": "Create, read, update, delete RAG stores",
+        "file_search": "Semantic search through uploaded documents",
+        "chat_history": "Persistent chat history per RAG store",
+        "example_questions": "AI-generated example questions for each RAG store",
+        "source_citations": "Grounding chunks with source references"
+      },
+      "frontend_features": {
+        "welcome_screen": "File upload interface with drag-and-drop",
+        "chat_interface": "Real-time chat with markdown rendering",
+        "document_list": "View and manage uploaded documents",
+        "rag_store_list": "View and manage RAG stores",
+        "progress_indicators": "Visual progress during document processing",
+        "example_suggestions": "Rotating example questions",
+        "source_modal": "View source document chunks",
+        "responsive_design": "Mobile-friendly interface"
+      },
+      "backend_features": {
+        "rest_api": "RESTful API endpoints",
+        "data_validation": "Request validation with express-validator",
+        "error_handling": "Comprehensive error handling",
+        "cors_support": "Configurable CORS for frontend",
+        "health_check": "Health check endpoint",
+        "pagination": "Chat history pagination"
+      }
+    },
+    "api_endpoints": {
+      "chats": {
+        "POST /api/chats": "Save a chat message",
+        "GET /api/chats": "Get user's chat history (with pagination and filtering)",
+        "DELETE /api/chats/:id": "Delete a chat message"
+      },
+      "ragstores": {
+        "POST /api/ragstores": "Create a new RAG store",
+        "GET /api/ragstores": "Get user's RAG stores",
+        "GET /api/ragstores/:name": "Get a specific RAG store with chat count",
+        "PUT /api/ragstores/:name": "Update a RAG store",
+        "DELETE /api/ragstores/:name": "Delete a RAG store and associated chats"
+      },
+      "health": {
+        "GET /health": "Health check endpoint"
+      }
+    },
+    "database_schema": {
+      "chats": {
+        "id": "serial primary key",
+        "user_id": "text (not null)",
+        "message": "text (not null)",
+        "response": "text (not null)",
+        "metadata": "jsonb (optional - stores grounding chunks, timestamps)",
+        "rag_store_name": "text (optional - links to RAG store)",
+        "created_at": "timestamp (default now)"
+      },
+      "rag_stores": {
+        "id": "serial primary key",
+        "user_id": "text (not null)",
+        "name": "text (not null - internal RAG store name)",
+        "display_name": "text (not null - user-visible name)",
+        "document_count": "integer (default 0)",
+        "metadata": "jsonb (optional - stores file names, example questions, etc.)",
+        "created_at": "timestamp (default now)",
+        "updated_at": "timestamp (default now)"
+      }
+    },
+    "key_components": {
+      "frontend": {
+        "App.tsx": "Root component with manual toggle",
+        "AuthenticatedApp.tsx": "Main authenticated app with state management",
+        "WelcomeScreen.tsx": "File upload and RAG store selection",
+        "ChatInterface.tsx": "Chat UI with markdown rendering and source citations",
+        "RagStoreList.tsx": "List and manage RAG stores",
+        "DocumentList.tsx": "List uploaded documents",
+        "geminiService.ts": "Gemini API integration for RAG operations",
+        "apiService.ts": "Backend API client"
+      },
+      "backend": {
+        "index.ts": "Express server setup and route registration",
+        "routes/chats.ts": "Chat CRUD operations",
+        "routes/ragstores.ts": "RAG store CRUD operations",
+        "middleware/auth.ts": "Clerk authentication middleware with admin fallback",
+        "db/schema.ts": "Drizzle ORM schema definitions",
+        "db/connection.ts": "PostgreSQL database connection"
+      }
+    },
+    "environment_variables": {
+      "frontend": {
+        "GEMINI_API_KEY": "Google Gemini API key",
+        "VITE_ALLOWED_EMAIL": "Optional email restriction",
+        "VITE_DEFAULT_RAG_STORE_NAME": "Default RAG store for non-authenticated users"
+      },
+      "backend": {
+        "PORT": "Server port (default: 3001)",
+        "DATABASE_URL": "PostgreSQL connection string",
+        "CLERK_SECRET_KEY": "Clerk secret key for authentication",
+        "ADMIN_USER_ID": "Fallback user ID for unauthenticated requests",
+        "FRONTEND_URL": "Comma-separated list of allowed frontend URLs",
+        "NODE_ENV": "Environment (development/production)"
+      }
+    },
+    "ports": {
+      "frontend": 5177,
+      "backend": 3001,
+      "postgres": 5432
+    },
+    "testing_considerations": {
+      "authentication": "Tests should handle both authenticated and unauthenticated scenarios",
+      "api_endpoints": "All endpoints require authentication (with admin fallback)",
+      "database": "Tests may need database setup/teardown",
+      "external_services": "Gemini API integration - may need mocking",
+      "frontend_interactions": "File upload, chat interface, modal interactions",
+      "error_handling": "Test error scenarios and validation failures"
+    }
+  }
+}

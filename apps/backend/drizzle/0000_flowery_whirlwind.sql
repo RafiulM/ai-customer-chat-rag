@@ -13,7 +13,7 @@ CREATE TABLE "rag_stores" (
 	"user_id" text NOT NULL,
 	"name" text NOT NULL,
 	"display_name" text NOT NULL,
-	"document_count" serial DEFAULT 0 NOT NULL,
+	"document_count" integer DEFAULT 0 NOT NULL,
 	"metadata" jsonb,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL

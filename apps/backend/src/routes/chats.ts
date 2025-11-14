@@ -41,10 +41,10 @@ router.post('/', requireAuth, validateChatMessage, async (req: Request, res: Res
     }
 
     const { message, response, ragStoreName, metadata } = req.body;
-    const userId = req.auth?.userId;
+    const userId = req.auth?.userId || process.env.ADMIN_USER_ID;
 
     if (!userId) {
-      return res.status(401).json({ error: 'User not authenticated' });
+      return res.status(500).json({ error: 'Server configuration error: ADMIN_USER_ID not set' });
     }
 
     // Verify RAG store exists if provided
@@ -84,11 +84,11 @@ router.post('/', requireAuth, validateChatMessage, async (req: Request, res: Res
 // GET /api/chats - Get user's chat history
 router.get('/', requireAuth, async (req: Request, res: Response) => {
   try {
-    const userId = req.auth?.userId;
+    const userId = req.auth?.userId || process.env.ADMIN_USER_ID;
     const { ragStoreName, limit = 50, offset = 0 } = req.query;
 
     if (!userId) {
-      return res.status(401).json({ error: 'User not authenticated' });
+      return res.status(500).json({ error: 'Server configuration error: ADMIN_USER_ID not set' });
     }
 
     // Build query
@@ -129,11 +129,11 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 // DELETE /api/chats/:id - Delete a chat message
 router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
-    const userId = req.auth?.userId;
+    const userId = req.auth?.userId || process.env.ADMIN_USER_ID;
     const chatId = parseInt(req.params.id);
 
     if (!userId) {
-      return res.status(401).json({ error: 'User not authenticated' });
+      return res.status(500).json({ error: 'Server configuration error: ADMIN_USER_ID not set' });
     }
 
     if (isNaN(chatId)) {

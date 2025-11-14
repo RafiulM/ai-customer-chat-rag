@@ -1,0 +1,16 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5177",
+  "executionArgs": {
+    "projectName": "ai-customer-chat-rag",
+    "projectPath": "/Users/rafiulm/ai-customer-chat-rag",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-_tQEUriAdUxx1p-xuGcX6V8-6SFEIoyGlq4A_YM2BYyBvzqdR0Wmxo3zqoKvxFBd8Q9LgWnMZnmnZGwmmJQWGZTgsteeLt6lZ2bk6HKecdILdz9uuWZwXlHpu52wJNtGG-Y"
+    }
+  },
+  "proxy": "http://6ebac7dd-277d-4e86-a015-ee5490080582:aDPUSBpD9P7yekCX5IdA1pWPFlrYKOo6@tun.testsprite.com:8080"
+}
